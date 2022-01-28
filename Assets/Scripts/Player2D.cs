@@ -22,6 +22,9 @@ public class Player2D : MonoBehaviour
 
     void Update()
     {
+        if (!CanMove())
+            return;
+
         horizontalValue = Input.GetAxisRaw("Horizontal");
 
         if(Input.GetButtonDown("Jump"))
@@ -39,13 +42,38 @@ public class Player2D : MonoBehaviour
         Move(horizontalValue, jump);
     }
 
+    bool CanMove()
+    {
+        bool can = true;
+
+        if (FindObjectOfType<InteractionSystem>().isExamining)
+            can = false;
+
+        return can;
+    }
+
     void GroundCheck()
     {
         isGrounded = false; 
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, grounCheckRadius, groundLayer);
         if (colliders.Length > 0)
+        {
             isGrounded = true;
+
+            foreach(var c in colliders)
+            {
+                if(c.tag == "MovingPlatform")
+                {
+                    transform.parent = c.transform;
+                }
+            }
+        }
+        else
+        {
+            transform.parent = null;
+        }
+            
     }
 
     void Move(float dir,bool jumpFlag)

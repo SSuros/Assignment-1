@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimeTogle : MonoBehaviour
 {
@@ -24,5 +25,10 @@ public class TimeTogle : MonoBehaviour
             }
             
         }
+    }
+
+    public void Win()
+    {
+        SceneManager.LoadScene("WinScreen");
     }
 }
